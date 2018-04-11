@@ -1,4 +1,4 @@
-package com.company;
+package pl.drodak;
 
 import java.util.Scanner;
 
