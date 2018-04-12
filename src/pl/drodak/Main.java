@@ -35,7 +35,8 @@ public class Main {
                 if (n.equals("quit")) {
                     menu();
                 } else {
-                    System.out.println("Nieprzewidziany wybór.");
+                    System.out.println("Nieprawidłowy wybór. Wpisz quit.");
+                    checkOption();
                 }
                 break;
             case ("2"):
@@ -45,7 +46,7 @@ public class Main {
                 System.exit(0);
                 break;
             default:
-                System.out.println("Nieprzewidziany wybór.");
+                System.out.println("Nieprawidłowy wybór. Wybierz 1 lub 2.");
                 menu();
         }
     }
@@ -64,53 +65,93 @@ public class Main {
         System.out.println("2. Różnica");
         System.out.println("3. Iloczyn");
         System.out.println("4. Iloraz");
+        System.out.println("5. Pierwiastek n-tego stopnia");
+        System.out.println("6. Potęga");
 
         checkCalculatorOption();
-        int a, b, wynik;
+        double a, b, wynik;
 
         switch (kalkulatorWybor) {
             case ("1"):
                 System.out.println("Podaj dwie liczby do zsumowania");
                 System.out.println("Podaj pierwszą liczbę");
-                a = input.nextInt();
+                a = input.nextDouble();
                 System.out.println("Podaj drugą liczbę");
-                b = input.nextInt();
+                b = input.nextDouble();
                 wynik = a + b;
+                wynik *= 100;
+                wynik = Math.round(wynik);
+                wynik /= 100;
                 System.out.println("Suma liczb wynosi " + wynik);
                 endOrNot();
                 break;
             case ("2"):
                 System.out.println("Podaj dwie liczby do odjęcia");
                 System.out.println("Podaj pierwszą liczbę");
-                a = input.nextInt();
+                a = input.nextDouble();
                 System.out.println("Podaj drugą liczbę");
-                b = input.nextInt();
+                b = input.nextDouble();
                 wynik = a - b;
+                wynik *= 100;
+                wynik = Math.round(wynik);
+                wynik /= 100;
                 System.out.println("Różnica liczb wynosi " + wynik);
                 endOrNot();
                 break;
             case ("3"):
                 System.out.println("Podaj dwie liczby do pomnożenia");
                 System.out.println("Podaj pierwszą liczbę");
-                a = input.nextInt();
+                a = input.nextDouble();
                 System.out.println("Podaj drugą liczbę");
-                b = input.nextInt();
+                b = input.nextDouble();
                 wynik = a * b;
+                wynik *= 100;
+                wynik = Math.round(wynik);
+                wynik /= 100;
                 System.out.println("Iloczyn liczb wynosi " + wynik);
                 endOrNot();
                 break;
             case ("4"):
                 System.out.println("Podaj dwie liczby do podzielenia");
                 System.out.println("Podaj pierwszą liczbę");
-                a = input.nextInt();
+                a = input.nextDouble();
                 System.out.println("Podaj drugą liczbę");
-                b = input.nextInt();
-                wynik = a / b;
-                System.out.println("Iloraz liczb wynosi " + wynik);
+                b = input.nextDouble();
+                if (b == 0) {
+                    System.out.println("Nie dzielimy przez 0!");
+                    calculatorMenu();
+                } else {
+                    wynik = a / b;
+                    wynik *= 100;
+                    wynik = Math.round(wynik);
+                    wynik /= 100;
+                    System.out.println("Iloraz liczb wynosi " + wynik);
+                    endOrNot();
+                }
+                break;
+            case ("5"):
+                System.out.println("Podaj liczbę z której chcesz policzyć pierwiastek.");
+                a = input.nextDouble();
+                System.out.println("Podaj stopień pierwiastka.");
+                b = input.nextDouble();
+                double c = 1.0;
+                double stopien = c / b;
+                wynik = Math.pow(a, stopien);
+                System.out.println("Pierwiatek "+ b +"-ego stopnia z liczby "+ a +" to "+ wynik);
+                endOrNot();
+                break;
+            case ("6"):
+                System.out.println("Podaj liczbę którą chcesz podnieść do potęgi.");
+                a = input.nextDouble();
+                System.out.println("Podaj potęgę.");
+                b = input.nextDouble();
+                wynik = Math.pow(a, b);
+                System.out.println("Liczba "+ a +" podniesiona do potegi "+ b +" to "+ wynik);
                 endOrNot();
                 break;
             default:
-                System.out.println("Nieprzewidziany wybór.");
+                System.out.println("Nieprawidłowy wybór. Wybierz 1, 2, 3, 4, 5 lub 6.");
+                calculatorMenu();
         }
     }
 
@@ -126,7 +167,8 @@ public class Main {
                 System.exit(0);
                 break;
             default:
-                System.out.println("Nieprzewidziany wybór.");
+                System.out.println("Nieprawidłowy wybór. Wpisz start lub end.");
+                endOrNot();
         }
     }
 }
