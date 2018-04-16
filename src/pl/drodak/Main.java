@@ -1,26 +1,34 @@
 package pl.drodak;
 
-import java.util.Scanner;
-import java.util.*;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-//import  java.io.*;
-//import  org.apache.poi.hssf.usermodel.HSSFSheet;
-//import  org.apache.poi.hssf.usermodel.HSSFWorkbook;
-//import  org.apache.poi.hssf.usermodel.HSSFRow;
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     static String pierwszyWybor, kalkulatorWybor;
     static Scanner reader = new Scanner(System.in);
     static private List<String> operacje = new ArrayList<>();
 
-
-    public static void main(String[] args) throws ScriptException {
+    public static void main(String[] args) throws ScriptException, IOException, WriteException {
         menu();
+
     }
 
-    private static void menu() throws ScriptException {
+    private static void menu() throws ScriptException, IOException, WriteException {
         System.out.println("****************************************");
         System.out.println("*             I LOVE JAVA              *");
         System.out.println("****************************************");
@@ -35,7 +43,7 @@ public class Main {
         pierwszyWybor = reader.nextLine();
     }
 
-    private static void checkOption() throws ScriptException {
+    private static void checkOption() throws ScriptException, IOException, WriteException {
         String n;
         switch (pierwszyWybor) {
             case ("1"):
@@ -66,7 +74,7 @@ public class Main {
         kalkulatorWybor = reader.nextLine();
     }
 
-    private static void calculatorMenu() throws ScriptException {
+    private static void calculatorMenu() throws ScriptException, IOException, WriteException {
         Scanner input = new Scanner(System.in);
         System.out.println("****************************************");
         System.out.println("*                 MENU                 *");
@@ -82,6 +90,9 @@ public class Main {
         checkCalculatorOption();
         double a, b, wynik;
         String aSt, bSt, wynikSt;
+        DateFormat df = new SimpleDateFormat("hh:mm:ss");
+        Date date = new Date();
+        String hour = df.format(date);
 
         switch (kalkulatorWybor) {
             case ("1"):
@@ -98,7 +109,7 @@ public class Main {
                 aSt = String.valueOf(a);
                 bSt = String.valueOf(b);
                 wynikSt = String.valueOf(wynik);
-                operacje.add(aSt + " + " + bSt + " = " + wynikSt);
+                operacje.add(aSt + " + " + bSt + " = " + wynikSt + "    " + hour);
                 endOrNot();
                 break;
             case ("2"):
@@ -115,7 +126,7 @@ public class Main {
                 aSt = String.valueOf(a);
                 bSt = String.valueOf(b);
                 wynikSt = String.valueOf(wynik);
-                operacje.add(aSt + " - " + bSt + " = " + wynikSt);
+                operacje.add(aSt + " - " + bSt + " = " + wynikSt + "    " + hour);
                 endOrNot();
                 break;
             case ("3"):
@@ -132,7 +143,7 @@ public class Main {
                 aSt = String.valueOf(a);
                 bSt = String.valueOf(b);
                 wynikSt = String.valueOf(wynik);
-                operacje.add(aSt + " * " + bSt + " = " + wynikSt);
+                operacje.add(aSt + " * " + bSt + " = " + wynikSt + "    " + hour);
                 endOrNot();
                 break;
             case ("4"):
@@ -153,7 +164,7 @@ public class Main {
                     aSt = String.valueOf(a);
                     bSt = String.valueOf(b);
                     wynikSt = String.valueOf(wynik);
-                    operacje.add(aSt + " / " + bSt + " = " + wynikSt);
+                    operacje.add(aSt + " / " + bSt + " = " + wynikSt + "    " + hour);
                     endOrNot();
                 }
                 break;
@@ -165,11 +176,11 @@ public class Main {
                 double c = 1.0;
                 double stopien = c / b;
                 wynik = Math.pow(a, stopien);
-                System.out.println("Pierwiatek "+ b +"-ego stopnia z liczby "+ a +" to "+ wynik);
+                System.out.println("Pierwiatek " + b + "-ego stopnia z liczby " + a + " to " + wynik);
                 aSt = String.valueOf(a);
                 bSt = String.valueOf(b);
                 wynikSt = String.valueOf(wynik);
-                operacje.add("sqrt[" + bSt + "](" + aSt + ") = " + wynikSt);
+                operacje.add("sqrt[" + bSt + "](" + aSt + ") = " + wynikSt + "  " + hour);
                 endOrNot();
                 break;
             case ("6"):
@@ -178,11 +189,11 @@ public class Main {
                 System.out.println("Podaj potęgę.");
                 b = input.nextDouble();
                 wynik = Math.pow(a, b);
-                System.out.println("Liczba "+ a +" podniesiona do potegi "+ b +" to "+ wynik);
+                System.out.println("Liczba " + a + " podniesiona do potegi " + b + " to " + wynik);
                 aSt = String.valueOf(a);
                 bSt = String.valueOf(b);
                 wynikSt = String.valueOf(wynik);
-                operacje.add(aSt + "^" + bSt + " = " + wynikSt);
+                operacje.add(aSt + "^" + bSt + " = " + wynikSt + "  " + hour);
                 endOrNot();
                 break;
             case ("7"):
@@ -194,7 +205,7 @@ public class Main {
                 System.out.println("Wynik działania to: " + engine.eval(foo));
                 aSt = String.valueOf(foo);
                 wynikSt = String.valueOf(engine.eval(foo));
-                operacje.add(aSt + " = " + wynikSt);
+                operacje.add(aSt + " = " + wynikSt + "  " + hour);
                 endOrNot();
                 break;
             default:
@@ -205,9 +216,24 @@ public class Main {
         }
     }
 
-    private static void endOrNot() throws ScriptException {
+    private static void print() throws IOException, WriteException {
+        File file = new File("G:\\output.xls");
+        WritableWorkbook wworkbook;
+        wworkbook = Workbook.createWorkbook(file);
+        WritableSheet wsheet = wworkbook.createSheet("First Sheet", 0);
+        WritableWorkbook workbook = Workbook.createWorkbook(new File("G:\\output.xls"));
+        int row = 0;
+        for (String str : operacje) {
+            wsheet.addCell(new Label(0, row, str));
+            row++;
+        }
+        wworkbook.write();
+        wworkbook.close();
+    }
+
+    private static void endOrNot() throws ScriptException, IOException, WriteException {
         String n;
-        System.out.println("Wpisz start, aby powrócić do początku, historia aby uzyskać historię wykonanych operacji lub end, aby zakończyć działanie programu.");
+        System.out.println("Wpisz start, aby powrócić do początku, historia aby uzyskać historię wykonanych operacji, drukuj by eksportować działania do pliku lub end, aby zakończyć działanie programu.");
         n = reader.nextLine();
         switch (n) {
             case ("start"):
@@ -217,7 +243,11 @@ public class Main {
                 System.exit(0);
                 break;
             case ("historia"):
-                System.out.println(operacje );
+                System.out.println(operacje);
+                endOrNot();
+                break;
+            case ("drukuj"):
+                print();
                 endOrNot();
                 break;
             default:
