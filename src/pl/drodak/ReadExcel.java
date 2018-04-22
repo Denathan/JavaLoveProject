@@ -38,7 +38,7 @@ class ReadExcel {
                     String FirstRowFirstColumn = cell.getContents();
                     wynik = String.valueOf(engine.eval(FirstRowFirstColumn));
                     System.out.println("Wynik " + FirstRowFirstColumn + " to: " + wynik);
-                    Main.operacje.add(FirstRowFirstColumn + "=" + wynik + "  " + hour);
+                    Main.operations.add(FirstRowFirstColumn + "=" + wynik + "  " + hour);
                 }
             }
         } catch (BiffException | ScriptException e) {

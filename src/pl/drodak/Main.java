@@ -13,49 +13,45 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
-    private static String pierwszyWybor, kalkulatorWybor;
+    private static String userChoice;
     private static Scanner reader = new Scanner(System.in);
-    static List<String> operacje = new ArrayList<>();
+    static List<String> operations = new ArrayList<>();
 
     public static void main(String[] args) throws ScriptException, IOException, WriteException {
-        menu();
+        mainMenu();
     }
 
-    private static void menu() throws ScriptException, IOException, WriteException {
-        System.out.println("****************************************");
+    private static void mainMenu() throws ScriptException, IOException, WriteException {
+        System.out.println(Strings.STARS.toString());
         System.out.println("*             I LOVE JAVA              *");
-        System.out.println("****************************************");
+        System.out.println(Strings.STARS.toString());
         System.out.println("1. Hello World");
         System.out.println("2. Kalkulator");
         userInput();
-        checkOption();
+        checkUserInput();
     }
 
     private static void userInput() {
-        System.out.println("\nWybierz opcję: ");
-        pierwszyWybor = reader.nextLine();
+        System.out.println(Strings.NEXT_LINE.toString() + Strings.CHOOSE_OPTION.toString());
+        userChoice = reader.nextLine();
     }
 
-    private static void checkOption() throws ScriptException, IOException, WriteException {
-        String n;
-        switch (pierwszyWybor) {
+    private static void checkUserInput() throws ScriptException, IOException, WriteException {
+        switch (userChoice) {
             case ("1"):
-                System.out.println("\n****************************************");
+                System.out.println(Strings.NEXT_LINE.toString() + Strings.STARS.toString());
                 System.out.println("*             Hello World              *");
-                System.out.println("****************************************\n");
+                System.out.println(Strings.STARS.toString() + Strings.NEXT_LINE.toString());
                 System.out.println("Wpisz quit aby powrócić do menu.");
-                n = reader.nextLine();
-                if (n.equals("quit")) {
-                    menu();
+                userChoice = reader.nextLine();
+                if (userChoice.equals("quit")) {
+                    mainMenu();
                 } else {
-                    System.out.println("\nNieprawidłowy wybór. Wpisz quit.");
-                    checkOption();
+                    System.out.println(Strings.NEXT_LINE.toString() + Strings.INCORRECT_CHOICE.toString() +"Wpisz quit.");
+                    checkUserInput();
                 }
                 break;
             case ("2"):
@@ -65,40 +61,61 @@ public class Main {
                 System.exit(0);
                 break;
             default:
-                System.out.println("\nNieprawidłowy wybór. Wybierz 1 lub 2.");
-                menu();
+                System.out.println(Strings.NEXT_LINE.toString() + Strings.INCORRECT_CHOICE.toString() + "Wybierz 1 lub 2.");
+                mainMenu();
         }
     }
 
     private static void checkCalculatorOption() {
-        System.out.println("\nWybierz opcję: ");
-        kalkulatorWybor = reader.nextLine();
+        System.out.println(Strings.NEXT_LINE.toString() + Strings.CHOOSE_OPTION.toString());
+        userChoice = reader.nextLine();
     }
 
-    private static double[] prosteOperacje() {
-        double a, b;
+    private static double tryFirstNumber() {
         Scanner input = new Scanner(System.in);
+        double firstNumber = 0;
+        try {
+            firstNumber = input.nextDouble();
+        } catch (InputMismatchException e){
+            System.out.println("Musisz podać liczbę!");
+            calculatorInputs();
+        }
+        return firstNumber;
+    }
+
+    private static double trySecondNumber() {
+        Scanner input = new Scanner(System.in);
+        double secondNumber = 0;
+        try {
+            secondNumber = input.nextDouble();
+        } catch (InputMismatchException e){
+            System.out.println("Musisz podać liczbę!");
+            calculatorInputs();
+        }
+        return secondNumber;
+    }
+
+    private static double[] calculatorInputs() {
+        double firstNumber, secondNumber;
         System.out.println("Podaj pierwszą liczbę");
-        a = input.nextDouble();
+        firstNumber = tryFirstNumber();
         System.out.println("Podaj drugą liczbę");
-        b = input.nextDouble();
-        return new double[]{a, b};
+        secondNumber = trySecondNumber();
+        return new double[]{firstNumber, secondNumber};
     }
 
-    private static double zaokraglij(double wynik) {
-        double zaokraglenie = wynik;
-        zaokraglenie *= 100;
-        zaokraglenie = Math.round(zaokraglenie);
-        zaokraglenie /= 100;
-        return zaokraglenie;
+    private static double roundUp(double outcome) {
+        double rounding = outcome;
+        rounding *= 100;
+        rounding = Math.round(rounding);
+        rounding /= 100;
+        return rounding;
     }
-
 
     private static void calculatorMenu() throws ScriptException, IOException, WriteException {
-        Scanner input = new Scanner(System.in);
-        System.out.println("\n****************************************");
+        System.out.println(Strings.NEXT_LINE.toString() + Strings.STARS.toString());
         System.out.println("*                 MENU                 *");
-        System.out.println("****************************************");
+        System.out.println(Strings.STARS.toString());
         System.out.println("1. Suma");
         System.out.println("2. Różnica");
         System.out.println("3. Iloczyn");
@@ -109,157 +126,147 @@ public class Main {
         System.out.println("8. Wczytaj z pliku");
 
         checkCalculatorOption();
-        double a, b, wynik;
-        double wyrazenie[];
-        String aSt, bSt, wynikSt;
+        double firstNumber, secondNumber, outcome;
+        double expression[];
         DateFormat df = new SimpleDateFormat("hh:mm:ss");
         Date date = new Date();
         String hour = df.format(date);
 
-        switch (kalkulatorWybor) {
+        switch (userChoice) {
             case ("1"):
-                System.out.println("\nPodaj dwie liczby do zsumowania");
-                wyrazenie = prosteOperacje();
-                wynik = wyrazenie[0] + wyrazenie[1];
-                wynik = zaokraglij(wynik);
-                System.out.println("\nSuma liczb wynosi " + wynik);
-                aSt = String.valueOf(wyrazenie[0]);
-                bSt = String.valueOf(wyrazenie[1]);
-                wynikSt = String.valueOf(wynik);
-                operacje.add(aSt + " + " + bSt + " = " + wynikSt + "    " + hour);
+                System.out.println(Strings.NEXT_LINE.toString() + Strings.INPUT_TWO_NUMBERS.toString() + "zsumowania");
+                expression = calculatorInputs();
+                outcome = expression[0] + expression[1];
+                outcome = roundUp(outcome);
+                System.out.println(Strings.NEXT_LINE.toString() + "Suma" + Strings.OUTCOME.toString() + outcome);
+                operations.add(expression[0] + " + " + expression[1] + " = " + outcome + "    " + hour);
                 endOrNot();
                 break;
             case ("2"):
-                System.out.println("\nPodaj dwie liczby do odjęcia");
-                wyrazenie = prosteOperacje();
-                wynik = wyrazenie[0] - wyrazenie[1];
-                wynik = zaokraglij(wynik);
-                System.out.println("\nRóżnica liczb wynosi " + wynik);
-                aSt = String.valueOf(wyrazenie[0]);
-                bSt = String.valueOf(wyrazenie[1]);
-                wynikSt = String.valueOf(wynik);
-                operacje.add(aSt + " - " + bSt + " = " + wynikSt + "    " + hour);
+                System.out.println(Strings.NEXT_LINE.toString() + Strings.INPUT_TWO_NUMBERS.toString() + "odjęcia");
+                expression = calculatorInputs();
+                outcome = expression[0] - expression[1];
+                outcome = roundUp(outcome);
+                System.out.println(Strings.NEXT_LINE.toString() + "Różnica" + Strings.OUTCOME.toString() + outcome);
+                operations.add(expression[0] + " - " + expression[1] + " = " + outcome + "    " + hour);
                 endOrNot();
                 break;
             case ("3"):
-                System.out.println("\nPodaj dwie liczby do pomnożenia");
-                wyrazenie = prosteOperacje();
-                wynik = wyrazenie[0] * wyrazenie[1];
-                wynik = zaokraglij(wynik);
-                System.out.println("\nIloczyn liczb wynosi " + wynik);
-                aSt = String.valueOf(wyrazenie[0]);
-                bSt = String.valueOf(wyrazenie[1]);
-                wynikSt = String.valueOf(wynik);
-                operacje.add(aSt + " * " + bSt + " = " + wynikSt + "    " + hour);
+                System.out.println(Strings.NEXT_LINE.toString() + Strings.INPUT_TWO_NUMBERS.toString() + "pomnożenia");
+                expression = calculatorInputs();
+                outcome = expression[0] * expression[1];
+                outcome = roundUp(outcome);
+                System.out.println(Strings.NEXT_LINE.toString() + "Iloczyn" + Strings.OUTCOME.toString() + outcome);
+                operations.add(expression[0] + " * " + expression[1] + " = " + outcome + "    " + hour);
                 endOrNot();
                 break;
             case ("4"):
-                System.out.println("\nPodaj dwie liczby do podzielenia");
-                wyrazenie = prosteOperacje();
-                if (wyrazenie[1] == 0) {
-                    System.out.println("\n!!!Nie dzielimy przez 0!!!");
+                System.out.println(Strings.NEXT_LINE.toString() + Strings.INPUT_TWO_NUMBERS.toString() + "podzielenia");
+                expression = calculatorInputs();
+                if (expression[1] == 0) {
+                    System.out.println(Strings.NEXT_LINE.toString() + "!!!Nie dzielimy przez 0!!!");
                     calculatorMenu();
                 } else {
-                    wynik = wyrazenie[0] / wyrazenie[1];
-                    wynik = zaokraglij(wynik);
-                    System.out.println("\nIloraz liczb wynosi " + wynik);
-                    aSt = String.valueOf(wyrazenie[0]);
-                    bSt = String.valueOf(wyrazenie[1]);
-                    wynikSt = String.valueOf(wynik);
-                    operacje.add(aSt + " / " + bSt + " = " + wynikSt + "    " + hour);
+                    outcome = expression[0] / expression[1];
+                    outcome = roundUp(outcome);
+                    System.out.println(Strings.NEXT_LINE.toString() + "Iloraz" + Strings.OUTCOME.toString() + outcome);
+                    operations.add(expression[0] + " / " + expression[1] + " = " + outcome + "    " + hour);
                     endOrNot();
                 }
                 break;
             case ("5"):
-                System.out.println("\nPodaj liczbę z której chcesz policzyć pierwiastek.");
-                a = input.nextDouble();
+                System.out.println(Strings.NEXT_LINE.toString() + "Podaj liczbę z której chcesz policzyć pierwiastek.");
+                firstNumber = tryFirstNumber();
                 System.out.println("Podaj stopień pierwiastka.");
-                b = input.nextDouble();
-                double c = 1.0;
-                double stopien = c / b;
-                wynik = Math.pow(a, stopien);
-                wynik = zaokraglij(wynik);
-                System.out.println("\nPierwiatek " + b + "-ego stopnia z liczby " + a + " to " + wynik);
-                aSt = String.valueOf(a);
-                bSt = String.valueOf(b);
-                wynikSt = String.valueOf(wynik);
-                operacje.add("sqrt[" + bSt + "](" + aSt + ") = " + wynikSt + "  " + hour);
+                secondNumber = trySecondNumber();
+                if (secondNumber == 0) {
+                    System.out.println("Stopień nie może być 0!");
+                    calculatorMenu();
+                }
+                double constant = 1.0;
+                double root = constant / secondNumber;
+                outcome = Math.pow(firstNumber, root);
+                outcome = roundUp(outcome);
+                System.out.println(Strings.NEXT_LINE.toString() + "Pierwiatek " + secondNumber + "-ego stopnia z liczby " + firstNumber + " to " + outcome);
+                operations.add("sqrt[" + secondNumber + "](" + firstNumber + ") = " + outcome + "  " + hour);
                 endOrNot();
                 break;
             case ("6"):
-                System.out.println("\nPodaj liczbę którą chcesz podnieść do potęgi.");
-                a = input.nextDouble();
+                System.out.println(Strings.NEXT_LINE.toString() + "Podaj liczbę którą chcesz podnieść do potęgi.");
+                firstNumber = tryFirstNumber();
                 System.out.println("Podaj potęgę.");
-                b = input.nextDouble();
-                wynik = Math.pow(a, b);
-                wynik = zaokraglij(wynik);
-                System.out.println("\nLiczba " + a + " podniesiona do potegi " + b + " to " + wynik);
-                aSt = String.valueOf(a);
-                bSt = String.valueOf(b);
-                wynikSt = String.valueOf(wynik);
-                operacje.add(aSt + "^" + bSt + " = " + wynikSt + "  " + hour);
+                secondNumber = trySecondNumber();
+                outcome = Math.pow(firstNumber, secondNumber);
+                outcome = roundUp(outcome);
+                System.out.println(Strings.NEXT_LINE.toString() + "Liczba " + firstNumber + " podniesiona do potegi " + secondNumber + " to " + outcome);
+                operations.add(firstNumber + "^" + secondNumber + " = " + outcome + "  " + hour);
                 endOrNot();
                 break;
             case ("7"):
-                System.out.println("\nWpisz działanie.");
-                ScriptEngineManager mgr = new ScriptEngineManager();
-                ScriptEngine engine = mgr.getEngineByName("JavaScript");
-                String foo;
-                foo = reader.nextLine();
-                System.out.println("\nWynik działania to: " + engine.eval(foo));
-                aSt = String.valueOf(foo);
-                wynikSt = String.valueOf(engine.eval(foo));
-                operacje.add(aSt + "=" + wynikSt + "  " + hour);
+                System.out.println(Strings.NEXT_LINE.toString() + "Wpisz działanie.");
+                ScriptEngineManager scriptEngine = new ScriptEngineManager();
+                ScriptEngine calculatorEngine = scriptEngine.getEngineByName("JavaScript");
+                String operation;
+                operation = reader.nextLine();
+                System.out.println(Strings.NEXT_LINE.toString() + "Wynik działania to: " + calculatorEngine.eval(operation));
+                String advancedOutcome;
+                advancedOutcome = String.valueOf(calculatorEngine.eval(operation));
+                operations.add(operation + "=" + advancedOutcome + "  " + hour);
                 endOrNot();
                 break;
             case ("8"):
-                ReadExcel excel = new ReadExcel();
-                excel.setInputFile("input.xls");
-                excel.read();
+                ReadExcel readExcel = new ReadExcel();
+                readExcel.setInputFile("input.xls");
+                readExcel.read();
                 endOrNot();
                 break;
             default:
-                System.out.println("\nNieprawidłowy wybór. Wybierz 1, 2, 3, 4, 5, 6 lub 7.");
+                System.out.println(Strings.NEXT_LINE.toString() + Strings.INCORRECT_CHOICE.toString());
                 calculatorMenu();
         }
     }
 
     private static void print() throws IOException, WriteException {
         File file = new File("output.xls");
-        WritableWorkbook wworkbook;
-        wworkbook = Workbook.createWorkbook(file);
-        WritableSheet wsheet = wworkbook.createSheet("First Sheet", 0);
+        WritableWorkbook workbook;
+        workbook = Workbook.createWorkbook(file);
+        WritableSheet wsheet = workbook.createSheet("First Sheet", 0);
         int row = 0;
-        for (String str : operacje) {
+        for (String str : operations) {
             wsheet.addCell(new Label(0, row, str));
             row++;
         }
-        wworkbook.write();
-        wworkbook.close();
-        System.out.println("Wydrukowano do pliku.\n");
+        workbook.write();
+        workbook.close();
+        System.out.println("Wydrukowano do pliku." + Strings.NEXT_LINE.toString());
     }
 
     private static void endOrNot() throws ScriptException, IOException, WriteException {
-        String n;
-        System.out.println("\nWpisz start, aby powrócić do początku, historia aby uzyskać historię wykonanych operacji, drukuj by eksportować działania do pliku lub end, aby zakończyć działanie programu.");
-        n = reader.nextLine();
-        switch (n) {
-            case ("start"):
-                menu();
+        System.out.println(Strings.NEXT_LINE.toString() + Strings.STARS.toString());
+        System.out.println("*                 MENU                 *");
+        System.out.println(Strings.STARS.toString());
+        System.out.println("1. Powrót do początku");
+        System.out.println("2. Uzyskaj historię wykonanych operacji");
+        System.out.println("3. Eksportuj działania do pliku");
+        System.out.println("4. Zakończyć działanie programu");
+        userChoice = reader.nextLine();
+        switch (userChoice) {
+            case ("1"):
+                mainMenu();
                 break;
-            case ("end"):
+            case ("2"):
                 System.exit(0);
                 break;
-            case ("historia"):
-                System.out.println(operacje);
+            case ("3"):
+                System.out.println(operations);
                 endOrNot();
                 break;
-            case ("drukuj"):
+            case ("4"):
                 print();
                 endOrNot();
                 break;
             default:
-                System.out.println("\nNieprawidłowy wybór. Wpisz start lub end.");
+                System.out.println(Strings.NEXT_LINE.toString() + Strings.INCORRECT_CHOICE.toString());
                 endOrNot();
         }
     }
