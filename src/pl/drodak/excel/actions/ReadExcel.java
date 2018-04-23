@@ -1,9 +1,10 @@
-package pl.drodak;
+package pl.drodak.excel.actions;
 
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
+import pl.drodak.user.experience.UserInterface;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -14,17 +15,17 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-class ReadExcel {
+public class ReadExcel {
     private String inputFile, wynik;
     private DateFormat df = new SimpleDateFormat("hh:mm:ss");
     private Date date = new Date();
     private String hour = df.format(date);
 
-    void setInputFile(String inputFile) {
+    public void setInputFile(String inputFile) {
         this.inputFile = inputFile;
     }
 
-    void read() throws IOException {
+    public void read() throws IOException {
         File inputWorkbook = new File(inputFile);
         Workbook wb;
         ScriptEngineManager mgr = new ScriptEngineManager();
@@ -38,7 +39,7 @@ class ReadExcel {
                     String FirstRowFirstColumn = cell.getContents();
                     wynik = String.valueOf(engine.eval(FirstRowFirstColumn));
                     System.out.println("Wynik " + FirstRowFirstColumn + " to: " + wynik);
-                    Main.operations.add(FirstRowFirstColumn + "=" + wynik + "  " + hour);
+                    UserInterface.operations.add(FirstRowFirstColumn + "=" + wynik + "  " + hour);
                 }
             }
         } catch (BiffException | ScriptException e) {

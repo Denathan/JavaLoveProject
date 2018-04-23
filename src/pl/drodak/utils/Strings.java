@@ -1,4 +1,4 @@
-package pl.drodak;
+package pl.drodak.utils;
 
 public enum Strings {
     STARS("****************************************"),
@@ -6,8 +6,7 @@ public enum Strings {
     INCORRECT_CHOICE("Nieprawidłowy wybór. Wybierz jedną z opcji dostępnych w menu."),
     CHOOSE_OPTION("Wybierz opcję:"),
     INPUT_TWO_NUMBERS("Podaj dwie liczby do "),
-    OUTCOME(" liczb wynosi ")
-    ;
+    OUTCOME(" liczb wynosi ");
 
     private final String text;
 
