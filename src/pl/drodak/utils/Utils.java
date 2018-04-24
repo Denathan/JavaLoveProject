@@ -7,31 +7,20 @@ import java.util.Scanner;
 
 public class Utils {
 
-    public static double tryFirstNumber() {
+    public double tryNumberInput() {
+        UserInterface userInterface = new UserInterface();
         Scanner input = new Scanner(System.in);
-        double firstNumber = 0;
+        double number = 0;
         try {
-            firstNumber = input.nextDouble();
+            number = input.nextDouble();
         } catch (InputMismatchException e) {
-            System.out.println("Musisz podać liczbę!");
-            UserInterface.calculatorInputs();
+            System.out.println(Strings.TRY_NUMBER_ERROR);
+            userInterface.calculatorInputs();
         }
-        return firstNumber;
+        return number;
     }
 
-    public static double trySecondNumber() {
-        Scanner input = new Scanner(System.in);
-        double secondNumber = 0;
-        try {
-            secondNumber = input.nextDouble();
-        } catch (InputMismatchException e) {
-            System.out.println("Musisz podać liczbę!");
-            UserInterface.calculatorInputs();
-        }
-        return secondNumber;
-    }
-
-    public static double roundUp(double outcome) {
+    public double roundUp(double outcome) {
         double rounding = outcome;
         rounding *= 100;
         rounding = Math.round(rounding);

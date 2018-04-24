@@ -15,22 +15,20 @@ import java.util.Date;
 import java.util.Scanner;
 
 class Calculator {
-    private static double firstNumber, secondNumber, outcome;
-    private static double expression[];
-    private static DateFormat df = new SimpleDateFormat("hh:mm:ss");
-    private static Date date = new Date();
-    private static String hour = df.format(date);
-    static Scanner reader = new Scanner(System.in);
+    private DateFormat df = new SimpleDateFormat("hh:mm:ss");
+    private Date date = new Date();
+    private String hour = df.format(date);
+    private Scanner reader = new Scanner(System.in);
+    private UserInterface userInterface = new UserInterface();
+    private Utils utils = new Utils();
 
-    static void calculatorMenu() throws ScriptException, IOException, WriteException {
-        switch (UserInterface.checkCalculatorOption()) {
+    void calculatorMenu() throws ScriptException, IOException, WriteException {
+        switch (userInterface.checkCalculatorOption()) {
             case ("1"):
                 addition();
-                UserInterface.endOrNot();
                 break;
             case ("2"):
                 subtraction();
-                UserInterface.endOrNot();
                 break;
             case ("3"):
                 product();
@@ -51,103 +49,96 @@ class Calculator {
                 operationsReadFromExcel();
                 break;
             default:
-                System.out.println(Strings.NEXT_LINE.toString() + Strings.INCORRECT_CHOICE.toString());
+                System.out.println(Strings.IC_CALCULATOR_MENU);
                 calculatorMenu();
         }
+        userInterface.endOrNot();
     }
 
-    private static void addition() throws ScriptException, IOException, WriteException {
-        System.out.println(Strings.NEXT_LINE.toString() + Strings.INPUT_TWO_NUMBERS.toString() + "zsumowania");
-        expression = UserInterface.calculatorInputs();
-        outcome = expression[0] + expression[1];
-        outcome = Utils.roundUp(outcome);
-        System.out.println(Strings.NEXT_LINE.toString() + "Suma" + Strings.OUTCOME.toString() + outcome);
-        UserInterface.operations.add(expression[0] + " + " + expression[1] + " = " + outcome + "    " + hour);
-        UserInterface.endOrNot();
+    private void addition() {
+        System.out.println(Strings.INPUT_TWO_NUMBERS + Strings.SUM_UP);
+        double expression[] = userInterface.calculatorInputs();
+        double outcome = expression[0] + expression[1];
+        outcome = utils.roundUp(outcome);
+        System.out.println(Strings.OUTCOME + outcome);
+        userInterface.operations.add(expression[0] + " + " + expression[1] + " = " + outcome + "    " + hour);
     }
 
-    private static void subtraction() throws ScriptException, IOException, WriteException {
-        System.out.println(Strings.NEXT_LINE.toString() + Strings.INPUT_TWO_NUMBERS.toString() + "odjęcia");
-        expression = UserInterface.calculatorInputs();
-        outcome = expression[0] - expression[1];
-        outcome = Utils.roundUp(outcome);
-        System.out.println(Strings.NEXT_LINE.toString() + "Różnica" + Strings.OUTCOME.toString() + outcome);
-        UserInterface.operations.add(expression[0] + " - " + expression[1] + " = " + outcome + "    " + hour);
-        UserInterface.endOrNot();
+    private void subtraction(){
+        System.out.println(Strings.INPUT_TWO_NUMBERS + Strings.SUBSTRACTION);
+        double expression[] = userInterface.calculatorInputs();
+        double outcome = expression[0] - expression[1];
+        outcome = utils.roundUp(outcome);
+        System.out.println(Strings.OUTCOME + outcome);
+        userInterface.operations.add(expression[0] + " - " + expression[1] + " = " + outcome + "    " + hour);
     }
 
-    private static void product() throws ScriptException, IOException, WriteException {
-        System.out.println(Strings.NEXT_LINE.toString() + Strings.INPUT_TWO_NUMBERS.toString() + "pomnożenia");
-        expression = UserInterface.calculatorInputs();
-        outcome = expression[0] * expression[1];
-        outcome = Utils.roundUp(outcome);
-        System.out.println(Strings.NEXT_LINE.toString() + "Iloczyn" + Strings.OUTCOME.toString() + outcome);
-        UserInterface.operations.add(expression[0] + " * " + expression[1] + " = " + outcome + "    " + hour);
-        UserInterface.endOrNot();
+    private void product() {
+        System.out.println(Strings.INPUT_TWO_NUMBERS + Strings.PRODUCT);
+        double expression[] = userInterface.calculatorInputs();
+        double outcome = expression[0] * expression[1];
+        outcome = utils.roundUp(outcome);
+        System.out.println(Strings.OUTCOME + outcome);
+        userInterface.operations.add(expression[0] + " * " + expression[1] + " = " + outcome + "    " + hour);
     }
 
-    private static void quotient() throws ScriptException, IOException, WriteException {
-        System.out.println(Strings.NEXT_LINE.toString() + Strings.INPUT_TWO_NUMBERS.toString() + "podzielenia");
-        expression = UserInterface.calculatorInputs();
+    private void quotient() throws ScriptException, IOException, WriteException {
+        System.out.println(Strings.INPUT_TWO_NUMBERS + Strings.QUOTIENT);
+        double expression[] = userInterface.calculatorInputs();
         if (expression[1] == 0) {
-            System.out.println(Strings.NEXT_LINE.toString() + "!!!Nie dzielimy przez 0!!!");
+            System.out.println(Strings.QUOTIENT_ZERO);
             calculatorMenu();
         } else {
-            outcome = expression[0] / expression[1];
-            outcome = Utils.roundUp(outcome);
-            System.out.println(Strings.NEXT_LINE.toString() + "Iloraz" + Strings.OUTCOME.toString() + outcome);
-            UserInterface.operations.add(expression[0] + " / " + expression[1] + " = " + outcome + "    " + hour);
-            UserInterface.endOrNot();
+            double outcome = expression[0] / expression[1];
+            outcome = utils.roundUp(outcome);
+            System.out.println(Strings.OUTCOME + outcome);
+            userInterface.operations.add(expression[0] + " / " + expression[1] + " = " + outcome + "    " + hour);
         }
     }
 
-    private static void root() throws ScriptException, IOException, WriteException {
-        System.out.println(Strings.NEXT_LINE.toString() + "Podaj liczbę z której chcesz policzyć pierwiastek.");
-        firstNumber = Utils.tryFirstNumber();
-        System.out.println("Podaj stopień pierwiastka.");
-        secondNumber = Utils.trySecondNumber();
+    private void root() throws ScriptException, IOException, WriteException {
+        System.out.println(Strings.INPUT_ROOT);
+        double firstNumber = utils.tryNumberInput();
+        System.out.println(Strings.ROOT_LEVEL);
+        double secondNumber = utils.tryNumberInput();
         if (secondNumber == 0) {
-            System.out.println("Stopień nie może być 0!");
+            System.out.println(Strings.ROOT_ZERO);
             calculatorMenu();
         }
         double constant = 1.0;
         double root = constant / secondNumber;
-        outcome = Math.pow(firstNumber, root);
-        outcome = Utils.roundUp(outcome);
-        System.out.println(Strings.NEXT_LINE.toString() + "Pierwiatek " + secondNumber + "-ego stopnia z liczby " + firstNumber + " to " + outcome);
-        UserInterface.operations.add("sqrt[" + secondNumber + "](" + firstNumber + ") = " + outcome + "  " + hour);
-        UserInterface.endOrNot();
+        double outcome = Math.pow(firstNumber, root);
+        outcome = utils.roundUp(outcome);
+        System.out.println(Strings.OUTCOME + outcome);
+        userInterface.operations.add("sqrt[" + secondNumber + "](" + firstNumber + ") = " + outcome + "  " + hour);
     }
 
-    private static void exponentiation() throws ScriptException, IOException, WriteException {
-        System.out.println(Strings.NEXT_LINE.toString() + "Podaj liczbę którą chcesz podnieść do potęgi.");
-        firstNumber = Utils.tryFirstNumber();
-        System.out.println("Podaj potęgę.");
-        secondNumber = Utils.trySecondNumber();
-        outcome = Math.pow(firstNumber, secondNumber);
-        outcome = Utils.roundUp(outcome);
-        System.out.println(Strings.NEXT_LINE.toString() + "Liczba " + firstNumber + " podniesiona do potegi " + secondNumber + " to " + outcome);
-        UserInterface.operations.add(firstNumber + "^" + secondNumber + " = " + outcome + "  " + hour);
-        UserInterface.endOrNot();
+    private void exponentiation() {
+        System.out.println(Strings.INPUT_EXPONENTATION);
+        double firstNumber = utils.tryNumberInput();
+        System.out.println(Strings.EXPONENTATION_LEVEL);
+        double secondNumber = utils.tryNumberInput();
+        double outcome = Math.pow(firstNumber, secondNumber);
+        outcome = utils.roundUp(outcome);
+        System.out.println(Strings.OUTCOME + outcome);
+        userInterface.operations.add(firstNumber + "^" + secondNumber + " = " + outcome + "  " + hour);
     }
 
-    private static void userInputOperations() throws ScriptException, IOException, WriteException {
-        System.out.println(Strings.NEXT_LINE.toString() + "Wpisz działanie.");
+    private void userInputOperations() throws ScriptException {
+        System.out.println(Strings.EXPONENTATION_LEVEL);
         ScriptEngineManager scriptEngine = new ScriptEngineManager();
         ScriptEngine calculatorEngine = scriptEngine.getEngineByName("JavaScript");
         String operation;
         operation = reader.nextLine();
-        System.out.println(Strings.NEXT_LINE.toString() + "Wynik działania to: " + calculatorEngine.eval(operation));
+        System.out.println(Strings.OUTCOME + calculatorEngine.eval(operation));
         String advancedOutcome;
         advancedOutcome = String.valueOf(calculatorEngine.eval(operation));
-        UserInterface.operations.add(operation + "=" + advancedOutcome + "  " + hour);
-        UserInterface.endOrNot();
+        userInterface.operations.add(operation + "=" + advancedOutcome + "  " + hour);
     }
 
-    private static void operationsReadFromExcel() throws ScriptException, IOException, WriteException {
+    private void operationsReadFromExcel() throws IOException {
         ReadExcel readExcel = new ReadExcel();
         readExcel.setInputFile("input.xls");
         readExcel.read();
-        UserInterface.endOrNot();
     }
 }

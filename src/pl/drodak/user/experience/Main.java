@@ -7,6 +7,7 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws ScriptException, IOException, WriteException {
-        UserInterface.mainMenu();
+        UserInterface userInterface = new UserInterface();
+        userInterface.mainMenu();
     }
 }

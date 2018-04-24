@@ -12,37 +12,31 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserInterface {
-    private static String userChoice;
-    private static Scanner reader = new Scanner(System.in);
-    public static List<String> operations = new ArrayList<>();
+    private String userChoice;
+    private Scanner reader = new Scanner(System.in);
+    public List<String> operations = new ArrayList<>();
+    private Utils utils = new Utils();
 
-    static void mainMenu() throws ScriptException, IOException, WriteException {
-        System.out.println(Strings.STARS.toString());
-        System.out.println("*             I LOVE JAVA              *");
-        System.out.println(Strings.STARS.toString());
-        System.out.println("1. Hello World");
-        System.out.println("2. Kalkulator");
+    void mainMenu() throws ScriptException, IOException, WriteException {
+        System.out.println(Strings.MAIN_MENU);
         userInput();
         checkUserInput();
     }
 
-    private static void userInput() {
-        System.out.println(Strings.NEXT_LINE.toString() + Strings.CHOOSE_OPTION.toString());
+    private void userInput() {
+        System.out.println(Strings.CHOOSE_OPTION);
         userChoice = reader.nextLine();
     }
 
-    private static void checkUserInput() throws ScriptException, IOException, WriteException {
+    private void checkUserInput() throws ScriptException, IOException, WriteException {
         switch (userChoice) {
             case ("1"):
-                System.out.println(Strings.NEXT_LINE.toString() + Strings.STARS.toString());
-                System.out.println("*             Hello World              *");
-                System.out.println(Strings.STARS.toString() + Strings.NEXT_LINE.toString());
-                System.out.println("Wpisz quit aby powrócić do menu.");
+                System.out.println(Strings.HELLO_WORLD_MENU);
                 userChoice = reader.nextLine();
-                if (userChoice.equals("quit")) {
+                if ("quit".equals(userChoice)) {
                     mainMenu();
                 } else {
-                    System.out.println(Strings.NEXT_LINE.toString() + Strings.INCORRECT_CHOICE.toString() +"Wpisz quit.");
+                    System.out.println(Strings.IC_HELLO_WORLD);
                     checkUserInput();
                 }
                 break;
@@ -53,49 +47,34 @@ public class UserInterface {
                 System.exit(0);
                 break;
             default:
-                System.out.println(Strings.NEXT_LINE.toString() + Strings.INCORRECT_CHOICE.toString() + "Wybierz 1 lub 2.");
+                System.out.println(Strings.IC_MAIN_MENU);
                 mainMenu();
         }
     }
 
-    private static void calculatorMenu() throws ScriptException, IOException, WriteException {
-        System.out.println(Strings.NEXT_LINE.toString() + Strings.STARS.toString());
-        System.out.println("*                 MENU                 *");
-        System.out.println(Strings.STARS.toString());
-        System.out.println("1. Suma");
-        System.out.println("2. Różnica");
-        System.out.println("3. Iloczyn");
-        System.out.println("4. Iloraz");
-        System.out.println("5. Pierwiastek n-tego stopnia");
-        System.out.println("6. Potęga");
-        System.out.println("7. Proste działanie wpisane przez Ciebie");
-        System.out.println("8. Wczytaj z pliku");
-        Calculator.calculatorMenu();
+    private void calculatorMenu() throws ScriptException, IOException, WriteException {
+        Calculator calculator = new Calculator();
+        System.out.println(Strings.CALCULATOR_MENU);
+        calculator.calculatorMenu();
     }
 
-    static String checkCalculatorOption() {
-        System.out.println(Strings.NEXT_LINE.toString() + Strings.CHOOSE_OPTION.toString());
+    String checkCalculatorOption() {
+        System.out.println(Strings.CHOOSE_OPTION);
         userChoice = reader.nextLine();
         return userChoice;
     }
 
-    public static double[] calculatorInputs() {
-        double firstNumber, secondNumber;
-        System.out.println("Podaj pierwszą liczbę");
-        firstNumber = Utils.tryFirstNumber();
-        System.out.println("Podaj drugą liczbę");
-        secondNumber = Utils.trySecondNumber();
+    public double[] calculatorInputs() {
+        System.out.println(Strings.INPUT_FIRST_NUMBER);
+        double firstNumber = utils.tryNumberInput();
+        System.out.println(Strings.INPUT_SECOND_NUMBER);
+        double secondNumber = utils.tryNumberInput();
         return new double[]{firstNumber, secondNumber};
     }
 
-    static void endOrNot() throws ScriptException, IOException, WriteException {
-        System.out.println(Strings.NEXT_LINE.toString() + Strings.STARS.toString());
-        System.out.println("*                 MENU                 *");
-        System.out.println(Strings.STARS.toString());
-        System.out.println("1. Powrót do początku");
-        System.out.println("2. Uzyskaj historię wykonanych operacji");
-        System.out.println("3. Eksportuj działania do pliku");
-        System.out.println("4. Zakończ działanie programu");
+    void endOrNot() throws ScriptException, IOException, WriteException {
+        PrintToExcel printToExcel = new PrintToExcel();
+        System.out.println(Strings.END_MENU);
         userChoice = reader.nextLine();
         switch (userChoice) {
             case ("1"):
@@ -103,18 +82,17 @@ public class UserInterface {
                 break;
             case ("2"):
                 System.out.println(operations);
-                endOrNot();
                 break;
             case ("3"):
-                PrintToExcel.print();
-                endOrNot();
+                printToExcel.print();
                 break;
             case ("4"):
                 System.exit(0);
                 break;
             default:
-                System.out.println(Strings.NEXT_LINE.toString() + Strings.INCORRECT_CHOICE.toString());
-                endOrNot();
+                System.out.println(Strings.IC_END);
+
         }
+        endOrNot();
     }
 }
