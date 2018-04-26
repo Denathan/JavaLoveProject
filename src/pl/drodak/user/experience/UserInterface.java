@@ -15,7 +15,6 @@ public class UserInterface {
     private String userChoice;
     private Scanner reader = new Scanner(System.in);
     public List<String> operations = new ArrayList<>();
-    private Utils utils = new Utils();
 
     void mainMenu() throws ScriptException, IOException, WriteException {
         System.out.println(Strings.MAIN_MENU);
@@ -29,10 +28,12 @@ public class UserInterface {
     }
 
     private void checkUserInput() throws ScriptException, IOException, WriteException {
+        CalculatorInterface calculator = new CalculatorInterface();
+        HelloWorld helloWorld = new HelloWorld();
         switch (userChoice) {
             case ("1"):
-                System.out.println(Strings.HELLO_WORLD_MENU);
-                userChoice = reader.nextLine();
+                helloWorld.printOutHelloWorld();
+                helloWorld.userInputHelloWorld();
                 if ("quit".equals(userChoice)) {
                     mainMenu();
                 } else {
@@ -41,7 +42,7 @@ public class UserInterface {
                 }
                 break;
             case ("2"):
-                calculatorMenu();
+                calculator.calculatorMenuOutprint();
                 break;
             case ("end"):
                 System.exit(0);
@@ -50,26 +51,6 @@ public class UserInterface {
                 System.out.println(Strings.IC_MAIN_MENU);
                 mainMenu();
         }
-    }
-
-    private void calculatorMenu() throws ScriptException, IOException, WriteException {
-        Calculator calculator = new Calculator();
-        System.out.println(Strings.CALCULATOR_MENU);
-        calculator.calculatorMenu();
-    }
-
-    String checkCalculatorOption() {
-        System.out.println(Strings.CHOOSE_OPTION);
-        userChoice = reader.nextLine();
-        return userChoice;
-    }
-
-    public double[] calculatorInputs() {
-        System.out.println(Strings.INPUT_FIRST_NUMBER);
-        double firstNumber = utils.tryNumberInput();
-        System.out.println(Strings.INPUT_SECOND_NUMBER);
-        double secondNumber = utils.tryNumberInput();
-        return new double[]{firstNumber, secondNumber};
     }
 
     void endOrNot() throws ScriptException, IOException, WriteException {
