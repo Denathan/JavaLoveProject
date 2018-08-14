@@ -1,15 +1,21 @@
 package pl.drodak.utils;
 
-import jxl.write.WriteException;
-
-import javax.script.ScriptException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryOfOperations {
-    private static List<String> operations = new ArrayList<>();
-    static void addToHistory() throws ScriptException, IOException, WriteException {
 
+    private List<String> operations = new ArrayList<String>();
+
+    public HistoryOfOperations(List<String> operations) {
+        this.operations = operations;
+    }
+
+    public String getOperations() {
+        return String.join(", ", this.operations);
+    }
+
+    public void setOperations(List<String> operations) {
+        this.operations = operations;
     }
 }

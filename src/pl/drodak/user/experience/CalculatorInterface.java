@@ -6,12 +6,10 @@ import pl.drodak.utils.Utils;
 
 import javax.script.ScriptException;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class CalculatorInterface {
 
     private UserInterface userInterface = new UserInterface();
-    private Calculator calculator = new Calculator();
 
     void calculatorMenuOutprint() throws ScriptException, IOException, WriteException {
         System.out.println(Strings.CALCULATOR_MENU);
@@ -19,6 +17,7 @@ public class CalculatorInterface {
     }
 
     void calculatorMenu() throws ScriptException, IOException, WriteException {
+        Calculator calculator = new Calculator();
         switch (checkCalculatorOption()) {
             case ("1"):
                 calculator.addition();
